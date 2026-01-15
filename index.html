@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- Manifest для Android и других браузеров -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <link rel="manifest" href="manifest.json">
+        <!-- Иконка для Android и общих целей -->
+        <link rel="icon" type="image/png" href="logo192.png">
+    </head>
+    <style>
+        .container{
+            width: 600px; /*ширина*/
+            height: 800px; /*высота*/
+            display: grid; /*располагать элементы внутри контейнера по сетке*/
+            grid-template-columns: 1fr 1fr 1fr 1fr;   /*шаблон столбцов*/
+                                                  /*4 одинаковых столбца*/
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr;  /*шаблон по строкам 5 одинаковых строк*/
+            grid-auto-flow: row; /*заполнять сетку построчно*/     /*fr - это часть, 1 fr это 1/5 если у вас 5 раз повторяется*/
+            background-color: burlywood;    
+            gap: 5px; /*отступ между элементами сетки*/   
+             
+        }
+        .screen{
+            grid-column: span 4; /*этот элемент занимает много столбцов*/
+            background-color: darkcyan; /*цвет фона*/
+            color: aqua; /*цвет текста*/
+            font-size: 80px; /*размер шрифта*/
+            text-align: right;
+        }
+        .button{
+            background-color: chocolate;
+            color: antiquewhite;
+            font-size: 40px;
+            text-align: center; /*выровнять по центру*/
+            padding-top: 30px; /*отступ сверху*/
+        }
+        .button:hover{
+              background-color: rgb(214, 179, 19);
+        }
+        .button:active{
+              background-color: rgb(214, 58, 19);
+        }
+    </style>
+    <body>
+        <div class="container">
+            <div class="screen"></div> <!--экран калькулятора-->
+            <div class="button" onclick="digit(1)">1</div>
+            <div class="button" onclick="digit(2)">2</div>
+            <div class="button" onclick="digit(3)">3</div>
+            <div class="button" onclick="deistv('+')">+</div>
+            <div class="button" onclick="digit(4)">4</div>
+            <div class="button" onclick="digit(5)">5</div>
+            <div class="button" onclick="digit(6)">6</div>
+            <div class="button" onclick="deistv('+')">-</div>
+            <div class="button" onclick="digit(7)">7</div>
+            <div class="button" onclick="digit(8)">8</div>
+            <div class="button" onclick="digit(9)">9</div>
+            <div class="button" onclick="deistv('*')">*</div>
+            <div class="button" onclick="digit(0)">0</div>
+            <div class="button" onclick="reset()">C</div>
+            <div class="button" onclick="equal()">=</div>
+            <div class="button" onclick="deistv('/')">/</div>
+        </div> <!-- здесь будет калькулятор-->
+    </body>
+    <script>
+        let cdeistv = ""; // глобальная переменная
+        let A=0; // первое число
+        function digit(num) /*параметр в функции*/
+        {
+            let screen = document.querySelector(".screen"); /* получаем элемент по классу*/
+            let content = screen.innerHTML; /*получаем в виде строки то что находится на экране*/
+            if (content.length>8) return; // Прекращаем выполнение при переполнении экрана
+                                        // Исправление по багу #1
+            while(content[0]=="0") // Пока спереди нули
+                content=content.substring(1);  // Оставляю подстроку с первого символа.
+
+            content = content + String(num); /*дописать в строку контент наш параметр*/
+
+            screen.innerHTML=content; // Записал обратно в экран содержимое
+
+        }
+        function deistv(dtype)
+        {
+             let screen = document.querySelector(".screen");
+             A = Number(screen.innerHTML); // Запоминаю первое число
+             cdeistv=dtype;
+             screen.innerHTML=""; // почистил экран
+        }
+        function equal()
+        {
+            let screen = document.querySelector(".screen");
+            let result=0
+            if (cdeistv!="") /*если задано действие которое надо делать*/
+            {
+                let B = Number(screen.innerHTML); // Запоминаю второе число
+                if (cdeistv=="+")
+                {
+                    result = A+B; // посчитал сумму
+                }
+                
+                res_str = String(result).substring(0, 8); // вырезать первые 8 символов
+                if (result>99999999 || isNaN(result) || !isFinite(result) )
+                {
+                    res_str="ERR " + res_str; // Вывожу ошибку при переполнении 
+                }
+                
+
+                screen.innerHTML=res_str; // записал в экран
+            }
+
+        }
+        function reset()
+        {
+            cdeistv=""; // сброс текущего действия 
+            let screen = document.querySelector(".screen");
+            screen.innerHTML="";
+        }
+
+    </script>
+</html>
