@@ -118,4 +118,19 @@
         }
 
     </script>
+   <!-- Регистрация Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('serviceworker.js')
+          .then(function(reg) {
+            console.log('Service Worker зарегистрирован:', reg.scope);
+          })
+          .catch(function(err) {
+            console.error('Ошибка регистрации SW:', err);
+          });
+      });
+    }
+  </script>
+
 </html>
